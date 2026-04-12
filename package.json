@@ -1,0 +1,30 @@
+{
+  "name": "tree-sitter-blink",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for the Blink programming language",
+  "main": "index.js",
+  "scripts": {
+    "build": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "generate": "tree-sitter generate"
+  },
+  "keywords": ["tree-sitter", "blink", "parser"],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "tree-sitter": [
+    {
+      "scope": "source.blink",
+      "file-types": ["bl"],
+      "highlights": "queries/highlights.scm",
+      "injection-regex": "blink"
+    }
+  ],
+  "devDependencies": {
+    "tree-sitter-cli": "^0.26.8"
+  },
+  "dependencies": {
+    "nan": "^2.26.2",
+    "tree-sitter": "^0.25.0"
+  }
+}

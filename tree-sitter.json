@@ -1,0 +1,17 @@
+{
+  "grammars": [
+    {
+      "name": "blink",
+      "scope": "source.blink",
+      "file-types": ["bl"],
+      "injection-regex": "blink",
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "package-name": "tree-sitter-blink",
+    "description": "Tree-sitter grammar for the Blink programming language",
+    "license": "MIT",
+    "version": "0.1.0"
+  }
+}
