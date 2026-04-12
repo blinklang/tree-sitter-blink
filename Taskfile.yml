@@ -1,0 +1,22 @@
+version: '3'
+
+tasks:
+  generate:
+    desc: Generate parser from grammar.js
+    sources:
+      - grammar.js
+    generates:
+      - src/parser.c
+    cmds:
+      - npx tree-sitter generate
+
+  test:
+    desc: Run corpus tests
+    cmds:
+      - npx tree-sitter test
+
+  ci:
+    desc: Generate and test
+    cmds:
+      - task: generate
+      - task: test
