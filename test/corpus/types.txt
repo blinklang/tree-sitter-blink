@@ -1,0 +1,420 @@
+================================================================================
+Simple struct
+================================================================================
+
+type Point { x: Float, y: Float }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Struct with field default
+================================================================================
+
+type Config { host: Str = "localhost", port: Int = 8080 }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier)
+      (string_literal))
+    (struct_field
+      (identifier)
+      (type_identifier)
+      (integer_literal))))
+
+================================================================================
+Enum with unit variants
+================================================================================
+
+type Direction {
+    North
+    South
+    East
+    West
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (enum_variant
+      (type_identifier))
+    (enum_variant
+      (type_identifier))
+    (enum_variant
+      (type_identifier))
+    (enum_variant
+      (type_identifier))))
+
+================================================================================
+Enum with payload variants
+================================================================================
+
+type Shape {
+    Circle(radius: Float)
+    Rect(w: Float, h: Float)
+    Empty
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (enum_variant
+      (type_identifier)
+      (variant_field
+        (identifier)
+        (type_identifier)))
+    (enum_variant
+      (type_identifier)
+      (variant_field
+        (identifier)
+        (type_identifier))
+      (variant_field
+        (identifier)
+        (type_identifier)))
+    (enum_variant
+      (type_identifier))))
+
+================================================================================
+Pub type declaration
+================================================================================
+
+pub type Point { x: Float, y: Float }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Type alias
+================================================================================
+
+type Name = Str
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_identifier)))
+
+================================================================================
+Generic type with type param
+================================================================================
+
+type Pair[T] { first: T, second: T }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_params
+      (type_param
+        (type_identifier)))
+    (struct_field
+      (identifier)
+      (type_identifier))
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Generic type with constrained type param
+================================================================================
+
+type Bounded[T: Display] { val: T }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_params
+      (type_param
+        (type_identifier)
+        (type_identifier)))
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Generic type with multiple type params
+================================================================================
+
+type Multi[T, U] { a: T, b: U }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (type_params
+      (type_param
+        (type_identifier))
+      (type_param
+        (type_identifier)))
+    (struct_field
+      (identifier)
+      (type_identifier))
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Simple trait
+================================================================================
+
+trait Display {
+    fn display(self) -> Str
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (trait_declaration
+    (type_identifier)
+    (fn_signature
+      (identifier)
+      (parameter
+        (self))
+      (type_identifier))))
+
+================================================================================
+Trait with associated type
+================================================================================
+
+trait BlockHandler {
+    type Context
+    fn enter(self) -> Str
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (trait_declaration
+    (type_identifier)
+    (assoc_type_decl
+      (type_identifier))
+    (fn_signature
+      (identifier)
+      (parameter
+        (self))
+      (type_identifier))))
+
+================================================================================
+Generic trait
+================================================================================
+
+trait Contains[T] {
+    fn contains(self, val: T) -> Bool
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (trait_declaration
+    (type_identifier)
+    (type_params
+      (type_param
+        (type_identifier)))
+    (fn_signature
+      (identifier)
+      (parameter
+        (self))
+      (parameter
+        (identifier)
+        (type_identifier))
+      (type_identifier))))
+
+================================================================================
+Pub trait
+================================================================================
+
+pub trait Display {
+    fn display(self) -> Str
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (trait_declaration
+    (type_identifier)
+    (fn_signature
+      (identifier)
+      (parameter
+        (self))
+      (type_identifier))))
+
+================================================================================
+Impl block with method
+================================================================================
+
+impl Display for Point {
+    fn display(self) -> Str { 42 }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (impl_declaration
+    (type_identifier)
+    (type_identifier)
+    (fn_declaration
+      (identifier)
+      (parameter
+        (self))
+      (type_identifier)
+      (block
+        (integer_literal)))))
+
+================================================================================
+Impl block with associated type definition
+================================================================================
+
+impl BlockHandler for Transaction {
+    type Context = Void
+    fn enter(self) -> Str { 42 }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (impl_declaration
+    (type_identifier)
+    (type_identifier)
+    (assoc_type_def
+      (type_identifier)
+      (type_identifier))
+    (fn_declaration
+      (identifier)
+      (parameter
+        (self))
+      (type_identifier)
+      (block
+        (integer_literal)))))
+
+================================================================================
+Impl block without for (standalone)
+================================================================================
+
+impl Point {
+    fn new(x: Int, y: Int) -> Int { x }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (impl_declaration
+    (type_identifier)
+    (fn_declaration
+      (identifier)
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (type_identifier))
+      (type_identifier)
+      (block
+        (identifier)))))
+
+================================================================================
+Annotation with plain type args
+================================================================================
+
+@derive(Serialize, Deserialize)
+type Task { id: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with dotted type args
+================================================================================
+
+@capabilities(DB.Read, IO.Log)
+type Ctx { name: Str }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Optional type sugar
+================================================================================
+
+type Wrapper { val: Int? }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (optional_type
+        (type_identifier)))))
+
+================================================================================
+Generic field type
+================================================================================
+
+type Container { items: List[Int] }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)))))

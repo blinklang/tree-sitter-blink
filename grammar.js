@@ -12,6 +12,9 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $.fn_declaration,
+        $.type_declaration,
+        $.trait_declaration,
+        $.impl_declaration,
         $.let_declaration,
         $.assignment,
         $.return_statement,
@@ -19,6 +22,145 @@ module.exports = grammar({
         $.continue_statement,
         $._expression,
       ),
+
+    // -- Annotations --
+
+    annotation: ($) =>
+      seq(
+        "@",
+        $.identifier,
+        optional(seq(
+          "(",
+          optional(seq(
+            $._annotation_arg,
+            repeat(seq(",", $._annotation_arg)),
+          )),
+          ")",
+        )),
+      ),
+
+    // dotted names like DB.Read, IO.Log, or plain TypeIdentifiers like Serialize
+    _annotation_arg: ($) =>
+      seq(
+        $.type_identifier,
+        optional(seq(".", $.type_identifier)),
+      ),
+
+    // -- Type declarations --
+
+    type_declaration: ($) =>
+      seq(
+        optional("pub"),
+        optional($.annotation),
+        "type",
+        $.type_identifier,
+        optional($.type_params),
+        choice(
+          seq("=", $._type),
+          seq("{", repeat($._type_member), "}"),
+        ),
+      ),
+
+    _type_member: ($) =>
+      choice(
+        $.struct_field,
+        $.enum_variant,
+      ),
+
+    struct_field: ($) =>
+      seq(
+        $.identifier,
+        ":",
+        $._type,
+        optional(seq("=", $._expression)),
+        optional(","),
+      ),
+
+    enum_variant: ($) =>
+      seq(
+        $.type_identifier,
+        optional(seq(
+          "(",
+          optional(seq(
+            $.variant_field,
+            repeat(seq(",", $.variant_field)),
+            optional(","),
+          )),
+          ")",
+        )),
+        optional(","),
+      ),
+
+    variant_field: ($) =>
+      seq($.identifier, ":", $._type),
+
+    type_params: ($) =>
+      seq(
+        "[",
+        $.type_param,
+        repeat(seq(",", $.type_param)),
+        "]",
+      ),
+
+    type_param: ($) =>
+      seq(
+        $.type_identifier,
+        optional(seq(
+          ":",
+          $._type,
+          repeat(seq("+", $._type)),
+        )),
+      ),
+
+    // -- Trait declarations --
+
+    trait_declaration: ($) =>
+      seq(
+        optional("pub"),
+        "trait",
+        $.type_identifier,
+        optional($.type_params),
+        "{",
+        repeat(choice(
+          $.assoc_type_decl,
+          $.fn_signature,
+        )),
+        "}",
+      ),
+
+    fn_signature: ($) =>
+      seq(
+        optional("pub"),
+        "fn",
+        $.identifier,
+        "(",
+        optional($._parameter_list),
+        ")",
+        optional(seq("->", $._type)),
+        optional(seq("!", $._effect_list)),
+      ),
+
+    assoc_type_decl: ($) =>
+      seq("type", $.type_identifier),
+
+    // -- Impl blocks --
+
+    impl_declaration: ($) =>
+      seq(
+        "impl",
+        $.type_identifier,
+        optional($.type_params),
+        optional(seq("for", $.type_identifier)),
+        "{",
+        repeat(choice(
+          $.assoc_type_def,
+          $.fn_declaration,
+        )),
+        "}",
+      ),
+
+    assoc_type_def: ($) =>
+      seq("type", $.type_identifier, "=", $._type),
 
     // -- Function declarations --
 
@@ -226,14 +368,22 @@ module.exports = grammar({
 
     _type: ($) =>
       choice(
-        $.type_identifier,
+        $.optional_type,
+        $.tuple_type,
         $.generic_type,
+        $.type_identifier,
       ),
 
     type_identifier: (_) => /[A-Z][a-zA-Z0-9_]*/,
 
     generic_type: ($) =>
       seq($.type_identifier, "[", $._type, repeat(seq(",", $._type)), "]"),
+
+    optional_type: ($) =>
+      prec.right(seq($._type, "?")),
+
+    tuple_type: ($) =>
+      seq("(", $._type, repeat1(seq(",", $._type)), ")"),
 
     // -- Identifiers --
 

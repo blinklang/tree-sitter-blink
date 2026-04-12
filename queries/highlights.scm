@@ -25,9 +25,28 @@
 "while" @keyword.repeat
 "loop" @keyword.repeat
 "in" @keyword.operator
+"type" @keyword.type
+"trait" @keyword.type
+"impl" @keyword.type
 (break_statement) @keyword
 (continue_statement) @keyword
 (self) @variable.builtin
+
+; Type declarations
+(type_declaration (type_identifier) @type.definition)
+(trait_declaration (type_identifier) @type.definition)
+(impl_declaration (type_identifier) @type)
+
+; Type parameters
+(type_params (type_param (type_identifier) @type.parameter))
+
+; Associated types
+(assoc_type_decl (type_identifier) @type)
+(assoc_type_def (type_identifier) @type)
+
+; Annotations
+(annotation "@" @attribute)
+(annotation (identifier) @attribute)
 
 ; Identifiers
 (identifier) @variable
