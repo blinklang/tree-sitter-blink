@@ -1,0 +1,95 @@
+================================================================================
+Simple effect declaration
+================================================================================
+
+effect Metrics {
+    fn counter(name: Str, value: Int)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (effect_declaration
+    (type_identifier)
+    (fn_signature
+      (identifier)
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (type_identifier)))))
+
+================================================================================
+Nested effect declaration
+================================================================================
+
+effect Metrics {
+    effect Emit {
+        fn counter(name: Str, value: Int)
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (effect_declaration
+    (type_identifier)
+    (effect_declaration
+      (type_identifier)
+      (fn_signature
+        (identifier)
+        (parameter
+          (identifier)
+          (type_identifier))
+        (parameter
+          (identifier)
+          (type_identifier))))))
+
+================================================================================
+Pub effect declaration
+================================================================================
+
+pub effect IO {
+    fn println(msg: Str)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (effect_declaration
+    (type_identifier)
+    (fn_signature
+      (identifier)
+      (parameter
+        (identifier)
+        (type_identifier)))))
+
+================================================================================
+With handler expression
+================================================================================
+
+with handler Metrics {
+    fn counter(name: Str, value: Int) { 42 }
+} {
+    foo()
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (with_handler_expression
+    (type_identifier)
+    (fn_declaration
+      (identifier)
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (type_identifier))
+      (block
+        (integer_literal)))
+    (block
+      (call_expression
+        (identifier)))))

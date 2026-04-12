@@ -1,0 +1,182 @@
+================================================================================
+Match with enum patterns
+================================================================================
+
+match s {
+    Circle(r) => 3.14
+    Rect(w, h) => 0.0
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (enum_pattern
+        (type_identifier)
+        (identifier))
+      (float_literal))
+    (match_arm
+      (enum_pattern
+        (type_identifier)
+        (identifier)
+        (identifier))
+      (float_literal))))
+
+================================================================================
+Match with wildcard
+================================================================================
+
+match s {
+    Circle(r) => 1
+    _ => 0
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (enum_pattern
+        (type_identifier)
+        (identifier))
+      (integer_literal))
+    (match_arm
+      (wildcard_pattern)
+      (integer_literal))))
+
+================================================================================
+Match with list patterns
+================================================================================
+
+match args {
+    [] => { show_help() }
+    [cmd] => { run(cmd) }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (list_pattern)
+      (block
+        (call_expression
+          (identifier))))
+    (match_arm
+      (list_pattern
+        (identifier))
+      (block
+        (call_expression
+          (identifier)
+          (argument
+            (identifier)))))))
+
+================================================================================
+Match with rest pattern
+================================================================================
+
+match args {
+    [cmd, ...] => 1
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (list_pattern
+        (identifier)
+        (rest_pattern))
+      (integer_literal))))
+
+================================================================================
+Match with string pattern
+================================================================================
+
+match cmd {
+    "build" => 1
+    "test" => 2
+    _ => 0
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (string_literal)
+      (integer_literal))
+    (match_arm
+      (string_literal)
+      (integer_literal))
+    (match_arm
+      (wildcard_pattern)
+      (integer_literal))))
+
+================================================================================
+Match with block arm
+================================================================================
+
+match x {
+    _ => {
+        42
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (wildcard_pattern)
+      (block
+        (integer_literal)))))
+
+================================================================================
+Match expression assigned to let
+================================================================================
+
+let area = match s {
+    Circle(r) => 1
+    _ => 0
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (match_expression
+      (identifier)
+      (match_arm
+        (enum_pattern
+          (type_identifier)
+          (identifier))
+        (integer_literal))
+      (match_arm
+        (wildcard_pattern)
+        (integer_literal)))))
+
+================================================================================
+Match with identifier pattern
+================================================================================
+
+match x {
+    n => n
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (identifier)
+      (identifier))))

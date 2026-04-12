@@ -1,0 +1,67 @@
+================================================================================
+With-as block
+================================================================================
+
+with open_resource("file.txt") as f {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (with_expression
+    (with_clause
+      (call_expression
+        (identifier)
+        (argument
+          (string_literal)))
+      (identifier))
+    (block
+      (integer_literal))))
+
+================================================================================
+With without as
+================================================================================
+
+with db.transaction() {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (with_expression
+    (with_clause
+      (call_expression
+        (field_access
+          (identifier)
+          (identifier))))
+    (block
+      (integer_literal))))
+
+================================================================================
+With multiple clauses
+================================================================================
+
+with open_resource("a") as a, open_resource("b") as b {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (with_expression
+    (with_clause
+      (call_expression
+        (identifier)
+        (argument
+          (string_literal)))
+      (identifier))
+    (with_clause
+      (call_expression
+        (identifier)
+        (argument
+          (string_literal)))
+      (identifier))
+    (block
+      (integer_literal))))

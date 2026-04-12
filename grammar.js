@@ -6,6 +6,11 @@ module.exports = grammar({
 
   extras: ($) => [$.comment, $.doc_comment, /\s/],
 
+  conflicts: ($) => [
+    [$._type, $.generic_type],
+    [$._expression, $.match_arm],
+  ],
+
   rules: {
     source_file: ($) => repeat($._statement),
 
@@ -15,11 +20,15 @@ module.exports = grammar({
         $.type_declaration,
         $.trait_declaration,
         $.impl_declaration,
+        $.effect_declaration,
         $.let_declaration,
+        $.const_declaration,
         $.assignment,
         $.return_statement,
         $.break_statement,
         $.continue_statement,
+        $.import_statement,
+        $.test_declaration,
         $._expression,
       ),
 
@@ -44,6 +53,33 @@ module.exports = grammar({
       seq(
         $.type_identifier,
         optional(seq(".", $.type_identifier)),
+      ),
+
+    // -- Import statements --
+
+    import_statement: ($) =>
+      seq(
+        optional("pub"),
+        "import",
+        $.identifier,
+        repeat(seq(".", $.identifier)),
+        optional($.selective_imports),
+      ),
+
+    selective_imports: ($) =>
+      seq(
+        ".",
+        "{",
+        $.import_item,
+        repeat(seq(",", $.import_item)),
+        optional(","),
+        "}",
+      ),
+
+    import_item: ($) =>
+      seq(
+        $.identifier,
+        optional(seq("as", $.identifier)),
       ),
 
     // -- Type declarations --
@@ -162,6 +198,24 @@ module.exports = grammar({
     assoc_type_def: ($) =>
       seq("type", $.type_identifier, "=", $._type),
 
+    // -- Effect declarations --
+
+    effect_declaration: ($) =>
+      seq(
+        optional("pub"),
+        "effect",
+        $.type_identifier,
+        "{",
+        repeat($._effect_member),
+        "}",
+      ),
+
+    _effect_member: ($) =>
+      choice(
+        $.effect_declaration,
+        $.fn_signature,
+      ),
+
     // -- Function declarations --
 
     fn_declaration: ($) =>
@@ -207,6 +261,23 @@ module.exports = grammar({
       ),
 
     effect_identifier: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    // -- Test declarations --
+
+    test_declaration: ($) =>
+      seq("test", $.string_literal, $.block),
+
+    // -- Const declarations --
+
+    const_declaration: ($) =>
+      seq(
+        optional("pub"),
+        "const",
+        choice($.identifier, $.type_identifier),
+        optional(seq(":", $._type)),
+        "=",
+        $._expression,
+      ),
 
     // -- Block expression --
 
@@ -263,17 +334,23 @@ module.exports = grammar({
       choice(
         $.binary_expression,
         $.unary_expression,
+        $.propagate_expression,
         $.parenthesized_expression,
         $.tuple_literal,
+        $.list_literal,
+        $.struct_literal,
         $.integer_literal,
         $.float_literal,
         $.string_literal,
         $.boolean_literal,
         $.closure_expression,
         $.if_expression,
+        $.match_expression,
         $.while_loop,
         $.loop_expression,
         $.for_in,
+        $.with_expression,
+        $.with_handler_expression,
         $.block,
         $.call_expression,
         $.field_access,
@@ -317,6 +394,103 @@ module.exports = grammar({
         $.block,
       ),
 
+    // -- Match expressions --
+
+    match_expression: ($) =>
+      seq(
+        "match",
+        $._expression,
+        "{",
+        repeat($.match_arm),
+        "}",
+      ),
+
+    match_arm: ($) =>
+      seq(
+        $._pattern,
+        "=>",
+        choice($._expression, $.block),
+      ),
+
+    _pattern: ($) =>
+      choice(
+        $.wildcard_pattern,
+        $.enum_pattern,
+        $.list_pattern,
+        $.string_literal,
+        $.integer_literal,
+        $.float_literal,
+        $.boolean_literal,
+        $.identifier,
+      ),
+
+    wildcard_pattern: (_) => "_",
+
+    enum_pattern: ($) =>
+      seq(
+        $.type_identifier,
+        "(",
+        optional(seq(
+          $._pattern_binding,
+          repeat(seq(",", $._pattern_binding)),
+          optional(","),
+        )),
+        ")",
+      ),
+
+    _pattern_binding: ($) =>
+      choice($.identifier, $.wildcard_pattern),
+
+    list_pattern: ($) =>
+      seq(
+        "[",
+        optional(seq(
+          $._list_pattern_element,
+          repeat(seq(",", $._list_pattern_element)),
+          optional(","),
+        )),
+        "]",
+      ),
+
+    _list_pattern_element: ($) =>
+      choice(
+        $.rest_pattern,
+        $._pattern,
+      ),
+
+    rest_pattern: (_) => "...",
+
+    // -- With expressions --
+
+    with_expression: ($) =>
+      seq(
+        "with",
+        $.with_clause,
+        repeat(seq(",", $.with_clause)),
+        $.block,
+      ),
+
+    with_clause: ($) =>
+      seq(
+        $._expression,
+        optional(seq("as", $.identifier)),
+      ),
+
+    // -- With-handler expressions --
+
+    with_handler_expression: ($) =>
+      seq(
+        "with",
+        "handler",
+        $.type_identifier,
+        "{",
+        repeat($.fn_declaration),
+        "}",
+        $.block,
+      ),
+
+    // -- Call, field, index --
+
     call_expression: ($) =>
       prec.left(10, seq(
         $._expression,
@@ -341,6 +515,33 @@ module.exports = grammar({
     tuple_literal: ($) =>
       seq("(", $._expression, repeat1(seq(",", $._expression)), ")"),
 
+    list_literal: ($) =>
+      seq(
+        "[",
+        optional(seq(
+          $._expression,
+          repeat(seq(",", $._expression)),
+          optional(","),
+        )),
+        "]",
+      ),
+
+    struct_literal: ($) =>
+      prec(1, seq(
+        $.type_identifier,
+        "{",
+        repeat($.struct_field_init),
+        "}",
+      )),
+
+    struct_field_init: ($) =>
+      seq(
+        $.identifier,
+        ":",
+        $._expression,
+        optional(","),
+      ),
+
     binary_expression: ($) =>
       choice(
         prec.left(7, seq($._expression, choice("*", "/", "%"), $._expression)),
@@ -349,8 +550,12 @@ module.exports = grammar({
         prec.left(4, seq($._expression, choice("==", "!="), $._expression)),
         prec.left(3, seq($._expression, "&&", $._expression)),
         prec.left(2, seq($._expression, "||", $._expression)),
+        prec.left(2, seq($._expression, "??", $._expression)),
         prec.right(1, seq($._expression, "|>", $._expression)),
       ),
+
+    propagate_expression: ($) =>
+      prec(9, seq($._expression, "?")),
 
     unary_expression: ($) =>
       prec(8, seq(choice("-", "!"), $._expression)),
