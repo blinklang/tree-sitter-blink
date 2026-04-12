@@ -14,12 +14,25 @@
 (string_interpolation "}" @punctuation.special)
 
 ; Keywords
+"fn" @keyword.function
+"pub" @keyword.modifier
 "let" @keyword
 "mut" @keyword.modifier
+"return" @keyword.return
+"if" @keyword.conditional
+"else" @keyword.conditional
+"for" @keyword.repeat
+"while" @keyword.repeat
+"loop" @keyword.repeat
+"in" @keyword.operator
+(break_statement) @keyword
+(continue_statement) @keyword
+(self) @variable.builtin
 
 ; Identifiers
 (identifier) @variable
 (type_identifier) @type
+(effect_identifier) @type.builtin
 
 ; Operators
 (binary_expression ["+" "-" "*" "/" "%" "==" "!=" "<" ">" "<=" ">=" "&&" "||" "|>"] @operator)

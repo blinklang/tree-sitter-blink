@@ -19,7 +19,9 @@
       "Bash(br close:*)",
       "Bash(br list:*)",
       "Bash(npx tree-sitter:*)",
-      "Bash(./node_modules/.bin/tree-sitter test:*)"
+      "Bash(./node_modules/.bin/tree-sitter test:*)",
+      "Bash(./node_modules/.bin/tree-sitter generate:*)",
+      "Bash(./node_modules/.bin/tree-sitter parse:*)"
     ]
   }
 }
