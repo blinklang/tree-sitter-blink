@@ -180,3 +180,42 @@ match x {
     (match_arm
       (identifier)
       (identifier))))
+
+================================================================================
+Match with tuple pattern
+================================================================================
+
+match t {
+    (x, y) => x
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (match_tuple_pattern
+        (identifier)
+        (identifier))
+      (identifier))))
+
+================================================================================
+Match with nested tuple pattern
+================================================================================
+
+match t {
+    (x, y, z) => x
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (match_expression
+    (identifier)
+    (match_arm
+      (match_tuple_pattern
+        (identifier)
+        (identifier)
+        (identifier))
+      (identifier))))

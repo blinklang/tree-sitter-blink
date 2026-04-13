@@ -1,0 +1,119 @@
+================================================================================
+Async scope expression
+================================================================================
+
+async.scope {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (async_scope_expression
+    (identifier)
+    (identifier)
+    (block
+      (integer_literal))))
+
+================================================================================
+Async scope expression with multiple statements
+================================================================================
+
+async.scope {
+    let x = 1
+    x
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (async_scope_expression
+    (identifier)
+    (identifier)
+    (block
+      (let_declaration
+        (identifier)
+        (integer_literal))
+      (identifier))))
+
+================================================================================
+Async spawn expression
+================================================================================
+
+async.spawn(fn() { 42 })
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (identifier)
+      (identifier))
+    (argument
+      (closure_expression
+        (block
+          (integer_literal))))))
+
+================================================================================
+Async spawn with argument
+================================================================================
+
+async.spawn(fn() { work() })
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (identifier)
+      (identifier))
+    (argument
+      (closure_expression
+        (block
+          (call_expression
+            (identifier)))))))
+
+================================================================================
+Await postfix expression
+================================================================================
+
+handle.await
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (await_expression
+    (identifier)))
+
+================================================================================
+Await on call expression result
+================================================================================
+
+async.spawn(fn() { 42 }).await
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (await_expression
+    (call_expression
+      (field_access
+        (identifier)
+        (identifier))
+      (argument
+        (closure_expression
+          (block
+            (integer_literal)))))))
+
+================================================================================
+Await in let binding
+================================================================================
+
+let result = handle.await
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (await_expression
+      (identifier))))

@@ -546,3 +546,69 @@ transfer(100, from: acct1, to: acct2)
     (argument
       (identifier)
       (identifier))))
+
+================================================================================
+Function with rest parameter separator
+================================================================================
+
+fn f(x: Int, -- y: Int, z: Int) {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (fn_declaration
+    (identifier)
+    (parameter
+      (identifier)
+      (type_identifier))
+    (parameter
+      (identifier)
+      (type_identifier))
+    (parameter
+      (identifier)
+      (type_identifier))
+    (block
+      (integer_literal))))
+
+================================================================================
+Function with only keyword-only params
+================================================================================
+
+fn f(-- x: Int) {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (fn_declaration
+    (identifier)
+    (parameter
+      (identifier)
+      (type_identifier))
+    (block
+      (integer_literal))))
+
+================================================================================
+Function with rest separator and trailing comma after marker
+================================================================================
+
+fn f(a: Int, -- b: Int) {
+    42
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (fn_declaration
+    (identifier)
+    (parameter
+      (identifier)
+      (type_identifier))
+    (parameter
+      (identifier)
+      (type_identifier))
+    (block
+      (integer_literal))))

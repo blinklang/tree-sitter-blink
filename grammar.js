@@ -9,6 +9,7 @@ module.exports = grammar({
   conflicts: ($) => [
     [$._type, $.generic_type],
     [$._expression, $.match_arm],
+    [$._expression, $.async_scope_expression],
   ],
 
   rules: {
@@ -232,10 +233,26 @@ module.exports = grammar({
       ),
 
     _parameter_list: ($) =>
-      seq(
-        $.parameter,
-        repeat(seq(",", $.parameter)),
-        optional(","),
+      choice(
+        seq(
+          $.parameter,
+          repeat(seq(",", $.parameter)),
+          optional(seq(
+            ",",
+            "--",
+            seq(
+              $.parameter,
+              repeat(seq(",", $.parameter)),
+            ),
+          )),
+          optional(","),
+        ),
+        seq(
+          "--",
+          $.parameter,
+          repeat(seq(",", $.parameter)),
+          optional(","),
+        ),
       ),
 
     parameter: ($) =>
@@ -355,6 +372,9 @@ module.exports = grammar({
         $.call_expression,
         $.field_access,
         $.index_access,
+        $.async_scope_expression,
+        $.await_expression,
+        $.embed_expression,
         $.identifier,
         $.type_identifier,
       ),
@@ -416,6 +436,7 @@ module.exports = grammar({
     _pattern: ($) =>
       choice(
         $.wildcard_pattern,
+        $.match_tuple_pattern,
         $.enum_pattern,
         $.list_pattern,
         $.string_literal,
@@ -423,6 +444,15 @@ module.exports = grammar({
         $.float_literal,
         $.boolean_literal,
         $.identifier,
+      ),
+
+    match_tuple_pattern: ($) =>
+      seq(
+        "(",
+        $._pattern,
+        repeat1(seq(",", $._pattern)),
+        optional(","),
+        ")",
       ),
 
     wildcard_pattern: (_) => "_",
@@ -569,6 +599,26 @@ module.exports = grammar({
 
     index_access: ($) =>
       prec.left(10, seq($._expression, "[", $._expression, "]")),
+
+    async_scope_expression: ($) =>
+      seq(
+        $.identifier,
+        ".",
+        $.identifier,
+        $.block,
+      ),
+
+    await_expression: ($) =>
+      prec.left(11, seq($._expression, ".", "await")),
+
+    embed_expression: ($) =>
+      seq(
+        "#",
+        "embed",
+        "(",
+        $.string_literal,
+        ")",
+      ),
 
     // -- Types --
 
