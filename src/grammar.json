@@ -1578,6 +1578,10 @@
         {
           "type": "SYMBOL",
           "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_identifier"
         }
       ]
     },

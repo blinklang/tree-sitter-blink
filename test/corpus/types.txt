@@ -418,3 +418,128 @@ type Container { items: List[Int] }
       (generic_type
         (type_identifier)
         (type_identifier)))))
+
+================================================================================
+Nested generic type List[List[Int]]
+================================================================================
+
+let a: List[List[Int]] = x
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)))
+    (identifier)))
+
+================================================================================
+Nested generic type Map[Str, Result[Int, Str]]
+================================================================================
+
+let b: Map[Str, Result[Int, Str]] = x
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)))
+    (identifier)))
+
+================================================================================
+Nested generic type Option[List[T]]
+================================================================================
+
+let c: Option[List[T]] = x
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)))
+    (identifier)))
+
+================================================================================
+Nested generic type Result[Map[Str, Int], List[Err]]
+================================================================================
+
+let d: Result[Map[Str, Int], List[Err]] = x
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))
+      (generic_type
+        (type_identifier)
+        (type_identifier)))
+    (identifier)))
+
+================================================================================
+Complex type in let binding Map[Str, List[Int]]
+================================================================================
+
+let x: Map[Str, List[Int]] = m
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)))
+    (identifier)))
+
+================================================================================
+Complex type in function signature with nested generics
+================================================================================
+
+fn f(x: Option[List[Int]]) -> Result[Map[Str, Int], Err] { x }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (fn_declaration
+    (identifier)
+    (parameter
+      (identifier)
+      (generic_type
+        (type_identifier)
+        (generic_type
+          (type_identifier)
+          (type_identifier))))
+    (generic_type
+      (type_identifier)
+      (generic_type
+        (type_identifier)
+        (type_identifier)
+        (type_identifier))
+      (type_identifier))
+    (block
+      (identifier))))

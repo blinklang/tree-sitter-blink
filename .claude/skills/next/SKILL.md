@@ -32,7 +32,7 @@ If `$ARGUMENTS` is provided, filter tasks whose title matches the argument (case
    - `type:chore` - auto-start, no confirmation needed.
 3. Don't skip a higher-priority task just because of its type. A P2 spec should be surfaced before a P4 feature.
 
-## Step 3: Route by Type
+## Step 3: Route by Type and do the work
 
 ### type:bug — Auto-start, parallelizable
 For each bug:
@@ -41,7 +41,8 @@ For each bug:
 3. Add a failing corpus test in `test/corpus/` that reproduces the bug
 4. Fix the bug in `grammar.js`
 5. `npx tree-sitter generate` then `npx tree-sitter test`
-6. `br close <id>`
+6. run `/simplify`
+7. `br close <id>`
 
 When working multiple bugs: use parallel agents with worktrees. Each agent gets one bug.
 
@@ -55,11 +56,12 @@ For each friction item:
    - Grammar improvement → `br add "..." -t repo:tree-sitter-blink -t type:feature`
 4. `br close <id>` the friction task
 5. Report what was created
+6. run `/simplify`
 
 ### type:feature — Confirm first, parallelizable
 1. Present all selected features with brief proposed approaches
 2. Wait for user approval of the batch
-3. Each feature: plan → implement in `grammar.js` → `npx tree-sitter generate` → `npx tree-sitter test` → `br close <id>`
+3. Each feature: plan → implement in `grammar.js` → `npx tree-sitter generate` → `npx tree-sitter test` → `/simplify` -> br close <id>`
 
 When working multiple features: use parallel agents with worktrees. Each agent gets one feature.
 

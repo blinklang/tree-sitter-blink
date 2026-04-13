@@ -81,3 +81,36 @@ import std.io.fs
     (identifier)
     (identifier)
     (identifier)))
+
+================================================================================
+Four-segment deep import
+================================================================================
+
+import a.b.c.d
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (import_statement
+    (identifier)
+    (identifier)
+    (identifier)
+    (identifier)))
+
+================================================================================
+Deep dotted import with selective imports
+================================================================================
+
+import std.io.{ read, write }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (import_statement
+    (identifier)
+    (identifier)
+    (selective_imports
+      (import_item
+        (identifier))
+      (import_item
+        (identifier)))))

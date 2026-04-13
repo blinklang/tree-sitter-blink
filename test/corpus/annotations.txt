@@ -1,0 +1,235 @@
+================================================================================
+No-arg annotation (trusted)
+================================================================================
+
+@trusted
+type Foo { x: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with single type arg (derive)
+================================================================================
+
+@derive(Json)
+type Task { id: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with multiple type args (derive)
+================================================================================
+
+@derive(Json, Eq)
+type Task { id: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with many derive args
+================================================================================
+
+@derive(Serialize, Deserialize, Eq, Ord, Hash)
+type Record { name: Str }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with diagnostic suppression arg
+================================================================================
+
+@allow(W0600)
+type Legacy { val: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with single dotted capability
+================================================================================
+
+@capabilities(DB.Read)
+type Ctx { name: Str }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with where constraint arg
+================================================================================
+
+@where(T)
+type Bounded { val: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with requires arg
+================================================================================
+
+@requires(Valid)
+type Input { val: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with ensures arg
+================================================================================
+
+@ensures(Ok)
+type Output { val: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation with empty parens
+================================================================================
+
+@derive()
+type Foo { x: Int }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation on pub type
+================================================================================
+
+pub @derive(Json)
+type Config { host: Str }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (struct_field
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+Annotation on enum type
+================================================================================
+
+@derive(Eq)
+type Direction {
+    North
+    South
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (annotation
+      (identifier)
+      (type_identifier))
+    (type_identifier)
+    (enum_variant
+      (type_identifier))
+    (enum_variant
+      (type_identifier))))

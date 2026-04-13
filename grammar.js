@@ -356,6 +356,7 @@ module.exports = grammar({
         $.field_access,
         $.index_access,
         $.identifier,
+        $.type_identifier,
       ),
 
     closure_expression: ($) =>

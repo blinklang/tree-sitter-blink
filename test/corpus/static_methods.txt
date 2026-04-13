@@ -1,0 +1,169 @@
+================================================================================
+Basic static method call no args
+================================================================================
+
+Type.static_method()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (type_identifier)
+      (identifier))))
+
+================================================================================
+Static method call with one arg
+================================================================================
+
+Char.from_code_point(65)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (type_identifier)
+      (identifier))
+    (argument
+      (integer_literal))))
+
+================================================================================
+Static method call with two args
+================================================================================
+
+Type.static_method(arg1, arg2)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (type_identifier)
+      (identifier))
+    (argument
+      (identifier))
+    (argument
+      (identifier))))
+
+================================================================================
+Static method call assigned to let binding
+================================================================================
+
+let x = Instant.from_epoch_secs(0)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (call_expression
+      (field_access
+        (type_identifier)
+        (identifier))
+      (argument
+        (integer_literal)))))
+
+================================================================================
+Chained: method call then field access
+================================================================================
+
+obj.method().field
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_access
+    (call_expression
+      (field_access
+        (identifier)
+        (identifier)))
+    (identifier)))
+
+================================================================================
+Chained: method call then method call
+================================================================================
+
+list.iter().map(fn(x: Int) -> Int { x })
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (call_expression
+        (field_access
+          (identifier)
+          (identifier)))
+      (identifier))
+    (argument
+      (closure_expression
+        (parameter
+          (identifier)
+          (type_identifier))
+        (type_identifier)
+        (block
+          (identifier))))))
+
+================================================================================
+Module-qualified call: two levels
+================================================================================
+
+std.io.println("hi")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (field_access
+        (identifier)
+        (identifier))
+      (identifier))
+    (argument
+      (string_literal))))
+
+================================================================================
+Type identifier as standalone expression
+================================================================================
+
+MyType
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_identifier))
+
+================================================================================
+Static method call with keyword arg
+================================================================================
+
+Instant.from_secs(secs: 10)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (field_access
+      (type_identifier)
+      (identifier))
+    (argument
+      (identifier)
+      (integer_literal))))
+
+================================================================================
+Static method call result passed to function
+================================================================================
+
+foo(Type.make())
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (identifier)
+    (argument
+      (call_expression
+        (field_access
+          (type_identifier)
+          (identifier))))))

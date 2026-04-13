@@ -493,3 +493,56 @@ list.len()
     (field_access
       (identifier)
       (identifier))))
+
+================================================================================
+Function call with all named args
+================================================================================
+
+foo(x: 1, y: 2)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (identifier)
+    (argument
+      (identifier)
+      (integer_literal))
+    (argument
+      (identifier)
+      (integer_literal))))
+
+================================================================================
+Function call with single named arg
+================================================================================
+
+f(label: "hello")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (identifier)
+    (argument
+      (identifier)
+      (string_literal))))
+
+================================================================================
+Function call with mixed positional and named args
+================================================================================
+
+transfer(100, from: acct1, to: acct2)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (call_expression
+    (identifier)
+    (argument
+      (integer_literal))
+    (argument
+      (identifier)
+      (identifier))
+    (argument
+      (identifier)
+      (identifier))))
