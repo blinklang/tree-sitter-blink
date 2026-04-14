@@ -63,7 +63,13 @@ Run this one-liner to download, compile, and configure:
 curl -sSL https://raw.githubusercontent.com/blinklang/tree-sitter-blink/main/install-ast-grep.sh | bash
 ```
 
-This compiles the grammar and installs it globally to `~/.config/ast-grep/`. No `--config` flag needed afterward. Then:
+This compiles the grammar and installs it to `~/.config/ast-grep/`. The script will print an alias to add to your shell profile:
+
+```bash
+alias ast-grep='ast-grep --config ~/.config/ast-grep/sgconfig.yml'
+```
+
+Then:
 
 ```bash
 # Find all calls to foo with one argument
