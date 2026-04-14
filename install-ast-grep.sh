@@ -68,6 +68,11 @@ mkdir -p "$INSTALL_DIR"
 
 # Write sgconfig.yml with absolute library path
 SGCONFIG="$INSTALL_DIR/sgconfig.yml"
+MERGED=false
+if [[ -f "$SGCONFIG" ]]; then
+    SGCONFIG="$INSTALL_DIR/sgconfig-blink.yml"
+    MERGED=true
+fi
 info "Writing $SGCONFIG..."
 cat > "$SGCONFIG" <<EOF
 customLanguages:
@@ -82,12 +87,18 @@ testConfigs: []
 EOF
 
 echo ""
-echo "Done! ast-grep is ready for Blink."
-echo ""
-echo "No --config needed — ast-grep will find $SGCONFIG automatically."
-echo ""
-echo "Example usage:"
-echo ""
-echo "  ast-grep run -p 'foo(\$X)' -l blink path/to/file.bl"
-echo "  ast-grep run -p 'foo(\$X)' -r 'bar(\$X)' -l blink path/to/file.bl"
+if [[ "$MERGED" == "true" ]]; then
+    echo "  ⚠️  An existing sgconfig.yml was found. Blink config written to:"
+    echo "  $SGCONFIG"
+    echo "  Manually merge it into your existing ~/.config/ast-grep/sgconfig.yml."
+else
+    echo "Done! ast-grep is ready for Blink."
+    echo ""
+    echo "No --config needed — ast-grep will find $SGCONFIG automatically."
+    echo ""
+    echo "Example usage:"
+    echo ""
+    echo "  ast-grep run -p 'foo(\$X)' -l blink path/to/file.bl"
+    echo "  ast-grep run -p 'foo(\$X)' -r 'bar(\$X)' -l blink path/to/file.bl"
+fi
 echo ""
