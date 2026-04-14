@@ -2324,22 +2324,34 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "identifier"
+              "type": "FIELD",
+              "name": "name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
             },
             {
               "type": "STRING",
               "value": ":"
             },
             {
-              "type": "SYMBOL",
-              "name": "_expression"
+              "type": "FIELD",
+              "name": "value",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_expression"
+              }
             }
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "_expression"
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression"
+          }
         }
       ]
     },
@@ -2999,7 +3011,7 @@
     },
     "identifier": {
       "type": "PATTERN",
-      "value": "[a-z_][a-zA-Z0-9_]*"
+      "value": "[$a-z_][a-zA-Z0-9_$]*"
     },
     "integer_literal": {
       "type": "PATTERN",

@@ -21,7 +21,8 @@
       "Bash(npx tree-sitter:*)",
       "Bash(./node_modules/.bin/tree-sitter test:*)",
       "Bash(./node_modules/.bin/tree-sitter generate:*)",
-      "Bash(./node_modules/.bin/tree-sitter parse:*)"
+      "Bash(./node_modules/.bin/tree-sitter parse:*)",
+      "Bash(./node_modules/.bin/tree-sitter build:*)"
     ]
   }
 }

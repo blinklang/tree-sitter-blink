@@ -539,8 +539,8 @@ module.exports = grammar({
 
     argument: ($) =>
       choice(
-        seq($.identifier, ":", $._expression),
-        $._expression,
+        seq(field("name", $.identifier), ":", field("value", $._expression)),
+        field("value", $._expression),
       ),
 
     tuple_literal: ($) =>
@@ -643,7 +643,7 @@ module.exports = grammar({
 
     // -- Identifiers --
 
-    identifier: (_) => /[a-z_][a-zA-Z0-9_]*/,
+    identifier: (_) => /[$a-z_][a-zA-Z0-9_$]*/,
 
     // -- Literals --
 

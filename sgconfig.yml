@@ -1,0 +1,9 @@
+customLanguages:
+  blink:
+    libraryPath: ./blink.so
+    extensions: [bl]
+    expandoAttribute: null
+    metaVarChar: "$"
+
+ruleDirs: []
+testConfigs: []
