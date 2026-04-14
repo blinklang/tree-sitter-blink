@@ -63,14 +63,14 @@ Run this one-liner to download, compile, and configure:
 curl -sSL https://raw.githubusercontent.com/blinklang/tree-sitter-blink/main/install-ast-grep.sh | bash
 ```
 
-This produces `blink.so` (or `blink.dylib` on Mac) and writes `sgconfig.yml` in the current directory. Then:
+This compiles the grammar and installs it globally to `~/.config/ast-grep/`. No `--config` flag needed afterward. Then:
 
 ```bash
 # Find all calls to foo with one argument
-ast-grep run -p 'foo($X)' -l blink --config sgconfig.yml src/
+ast-grep run -p 'foo($X)' -l blink src/
 
 # Rename foo to bar across all .bl files
-ast-grep run -p 'foo($X)' -r 'bar($X)' -l blink --config sgconfig.yml src/
+ast-grep run -p 'foo($X)' -r 'bar($X)' -l blink src/
 ```
 
 **Requirements:** a C compiler (`gcc` or `clang`) and `curl`.
