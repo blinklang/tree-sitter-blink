@@ -95,10 +95,10 @@ if [[ "$MERGED" == "true" ]]; then
 else
     echo "Done! Blink grammar installed to $INSTALL_DIR."
     echo ""
-    echo "ast-grep doesn't auto-discover global configs, so add this alias to your shell profile:"
+    echo "ast-grep doesn't auto-discover global configs, so add this function to your shell profile:"
     echo "  (~/.bashrc, ~/.zshrc, or ~/.config/fish/config.fish)"
     echo ""
-    echo "  alias ast-grep='ast-grep --config $SGCONFIG'"
+    echo "  ast-grep() { command ast-grep --config $SGCONFIG \"\$@\"; }"
     echo ""
     echo "Then use it like:"
     echo ""

@@ -66,7 +66,7 @@ curl -sSL https://raw.githubusercontent.com/blinklang/tree-sitter-blink/main/ins
 This compiles the grammar and installs it to `~/.config/ast-grep/`. The script will print an alias to add to your shell profile:
 
 ```bash
-alias ast-grep='ast-grep --config ~/.config/ast-grep/sgconfig.yml'
+ast-grep() { command ast-grep --config ~/.config/ast-grep/sgconfig.yml "$@"; }
 ```
 
 Then:
